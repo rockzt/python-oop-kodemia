@@ -5,6 +5,23 @@ current_path = os.path.dirname(__file__)
 COMMENT_FILE_NAME = "comments.json"
 COMMENT_FILE_PATH = current_path + f"/{COMMENT_FILE_NAME}"
 
+'''Decorators'''
+def log_file_save(func):
+    def wrapper(instance):
+        func(instance)
+        file = open("log_actions.txt", "a")
+        file.write("Archivo Guardado!!")
+        file.close()
+    return wrapper
+
+def log_file_save_message(func):
+    def wrapper(instance):
+        func(instance)
+        print("Nueva entidad guardada!!")
+    return wrapper
+
+
+
 
 class Comment:
     def __init__(self, content, created_by, article):
@@ -22,6 +39,8 @@ class Comment:
     def get_all(self):
         return file_manager.read_json_file(COMMENT_FILE_PATH)
 
+    @log_file_save
+    @log_file_save_message
     def save(self):
         dict_comment = self.as_dict()
 
